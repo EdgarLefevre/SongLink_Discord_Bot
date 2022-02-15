@@ -21,7 +21,7 @@ def get_links(url):
             links.append(response.json()['linksByPlatform'][p]['url'])
         return links
     except Exception as e:
-        print("Error get_links : " + e)
+        print("Error get_links : " + str(e))
         return None
 
 
@@ -41,11 +41,11 @@ async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
 
-@bot.command(name='sl', help='Give a music link and get all other plateform link')
+@bot.command(name='sl', help='Give a music link and get all other plateform link.\nType !sl <link> to get your links.')
 async def sl(ctx, link):
     link_list = get_links(link)
     response = create_response(link_list)
     await ctx.send(response)
 
 
-bot.run(TOKEN, bot=True, reconnect=True)
+bot.run(TOKEN)
