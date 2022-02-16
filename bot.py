@@ -14,7 +14,7 @@ PLATFORMS = ["appleMusic", 'spotify', "deezer", 'youtubeMusic']
 
 def get_links(url):
     links = []
-    api_link = "https://api.song.link/v1-alpha.1/links?url=" + url + "&userCountry=US"
+    api_link = "https://api.song.link/v1-alpha.1/links?url=" + url + "&userCountry=FR"
     response = requests.get(api_link)
     for p in PLATFORMS:
         try:
