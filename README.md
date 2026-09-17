@@ -6,7 +6,7 @@ The bot resolves a link with the [SongPort API](https://songport.link/docs/api).
 
 ## Requirements
 
-- Python 3.10 or later.
+- Python 3.10 or later, or Docker. The image carries its own Python, so a Docker host needs none.
 - A Discord bot token.
 - A SongPort API key.
 
@@ -77,7 +77,35 @@ The tests run a local HTTP server that imitates the SongPort API, so they need n
 
 ## Deployment
 
-The bot opens a websocket to Discord and keeps it open, so it must run as a process that stays alive. A small virtual machine, a container, or a Raspberry Pi is sufficient. Set `DISCORD_TOKEN` and `SONGPORT_API_KEY` as environment variables, because the `.env` file is only a convenience for local work.
+The bot opens a websocket to Discord and keeps it open, so it must run as a process that stays alive. A small virtual machine, a container, or a Raspberry Pi is sufficient.
+
+### With Docker
+
+This is the shortest route for a server admin. Run these commands on the server:
+
+```shell
+git clone git@github.com:EdgarLefevre/SongLink_Discord_Bot.git
+cd SongLink_Discord_Bot
+cp .env.example .env
+```
+
+Put the two secrets in `.env`, then leave `DISCORD_GUILD_ID` empty so the command reaches every server. Then start the bot:
+
+```shell
+docker compose up -d
+```
+
+Read the log with `docker compose logs -f`. The bot is ready when the log prints `connected as`.
+
+Use `docker compose down` to stop the bot, and `docker compose up -d --build` to deploy a new version after `git pull`.
+
+The container restarts on its own after a crash and after a reboot, because the service sets `restart: unless-stopped`.
+
+The image holds no secret. Docker reads `.env` at start time, and `.dockerignore` keeps that file out of the image.
+
+### Without Docker
+
+Set `DISCORD_TOKEN` and `SONGPORT_API_KEY` as environment variables, because the `.env` file is only a convenience for local work. Run `python bot.py` under a process manager such as systemd, so the bot restarts after a crash.
 
 ## Errors
 
