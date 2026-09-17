@@ -1,0 +1,7 @@
+services:
+  bot:
+    build: .
+    image: songlink-bot
+    container_name: songlink-bot
+    env_file: .env
+    restart: unless-stopped
